@@ -1,0 +1,7 @@
+.idea/
+.venv/
+
+P1_flask_crud_api/instance/*.db
+P1_flask_crud_api/instance/__pycache__/
+
+P1_flask_crud_api/__pycache__/
