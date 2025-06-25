@@ -1,4 +1,4 @@
-## Moment 1 - API med Flask
+## Delprojekt 1 - API med Flask
 
 ### Syfte
 I denna del av projektet ska en enkel server med REST API byggas. För detta kommer Pythonramverket Flask att användas.
@@ -10,7 +10,7 @@ API:t kommer att erbjuda ett användarregister där data lagras i en databas via
 att skapa, hämta, uppdatera och radera användare via olika HTTP-anrop (CRUD).
 
 ### Mål
-Efter slutfört delmoment ska jag kunna:
+Efter slutfört delprojekt ska jag kunna:
 * Förstå grunderna i hur ramverket Flask används för utveckling backend-komponenter
 * Utveckla och underhålla en API-server skriven med Flask
 * Hantera routing, HTTP-metoder, JSON-hantering och enklare felhantering i Flask

@@ -30,4 +30,21 @@ Efter avslutat projektet ska jag kunna:
 * Skapa och hantera pipelines för testautomatisering i en CI/CD-miljö
 * Förstå och tillämpa principer för kodkvalitet och underhållbarhet
 * Använda relevanta verktyg och tekniker för att bygga testbara, containeriserade system
-* Applicera dessa kunskaper i framtida projekt, med stöd från relevanta externa källor (ChatGPT, dokumentation, Youtube, blogginlägg etc.)
+* Applicera dessa kunskaper i framtida projekt, med stöd från relevanta externa källor (ChatGPT, dokumentation, Youtube, 
+blogginlägg etc.)
+
+### Projektstruktur
+```bash
+test-automation-portfolio/
+├── P1_flask_crud_api/          ← Skapa REST API i Flask
+├── P2_api_testing_pytest/      ← Testa API med pytest
+├── P3_postman_newman/          ← Testa API med Postman & Newman CLI
+├── P4_jenkins_ci/              ← CI/CD för tester i Jenkins
+├── P5_docker_flask/            ← Dockerisera Flask-applikationen
+├── P6_bdd_behave/              ← BDD-tester mot API
+├── P7_flask_frontend/          ← 🆕 Enkel frontend i Flask + HTML
+├── P8_selenium_ui_test/        ← UI-test mot frontend med Selenium
+├── P9_playwright_ui_test/      ← UI-test med Playwright
+├── P10_code_quality/           ← Linting, formattering, coverage
+├── P11_fullstack_combined/     ← Slutligt helhetsprojekt
+└── README.md                   ← Introduktion till hela portföljen
