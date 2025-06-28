@@ -1,24 +1,24 @@
-# PyCharm project files
+# PyCharm prjekt filer
 .idea/
 
-# Virtual environments
+# Virtuella miljöer
 .venv/
 venv/
 
-# Python cache
+# cache:ade filer
 __pycache__/
 *.py[cod]
 
-# SQLite database files
+# databas-filer
 *.db
 
-# Flask instance folder
+# Flask instans-mapp
 instance/
 
-# Environment variables
+# Miljö-variabler
 .env
 
-# Test reports and coverage data
+# Testrapporter och täckningsdata
 *.log
 *.coverage
 htmlcov/
