@@ -1,12 +1,23 @@
 from flask import Blueprint, jsonify, request
+from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from models import db, User
 
 routes = Blueprint('routes', __name__)
 
 @routes.route('/users', methods=['GET'])
 def get_users():
-    users = User.query.all()
+    stmt = select(User)
+    users = db.session.scalars(stmt).all()
     return jsonify([{'id': user.id, 'name': user.name, 'email': user.email} for user in users])
+
+@routes.route('/users/<int:id>', methods=['GET'])
+def get_user(id):
+    user = db.session.get(User, id)
+
+    if user is None:
+        return jsonify({'error': 'User not found!'}), 404
+    return jsonify({'id': user.id, 'name': user.name, 'email': user.email})
 
 @routes.route('/users', methods=['POST'])
 def post_user():
@@ -15,17 +26,25 @@ def post_user():
     email = data.get('email')
 
     if not name or not email:
-        return jsonify({'error': 'Missing name or email'}), 400
+        return jsonify({'error': 'Missing name or email.'}), 400
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'E-mail already exists!'}), 409
 
     new_user = User(name=name, email=email)
-    db.session.add(new_user)
-    db.session.commit()
 
-    return jsonify({'message': 'User added', 'id': new_user.id}), 201
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'error': 'Database integrity error'}), 500
+
+    return jsonify({'message': 'User added!', 'id': new_user.id}), 201
 
 @routes.route('/users/<int:id>', methods=['DELETE'])
-def del_user(id_):
-    user = User.query.get(id)
+def del_user(id):
+    user = db.session.get(User, id)
 
     if user is None:
         return jsonify({'error': 'User not found!'}), 404
@@ -36,8 +55,8 @@ def del_user(id_):
     return jsonify({'message': f'User with id {id} deleted.'}), 200
 
 @routes.route('/users/<int:id>', methods=['PUT'])
-def update_user(id_):
-    user = User.query.get(id)
+def update_user(id):
+    user = db.session.get(User, id)
 
     if user is None:
         return jsonify({'error': 'User not found!'}), 404
@@ -45,6 +64,14 @@ def update_user(id_):
     data = request.get_json()
     name = data.get('name')
     email = data.get('email')
+
+    if not name or not email:
+        return jsonify({'error': 'Missing name or e-mail.'}), 400
+
+    existing_user = User.query.filter_by(email=email).first()
+    if existing_user and existing_user.id != user.id:
+        return jsonify({'error': 'E-mail already exists.'}), 409
+
 
     user.name = name
     user.email = email
