@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
-from models import db, User
+from P1_flask_crud_api.models import db, User
 
 routes = Blueprint('routes', __name__)
 
