@@ -27,3 +27,17 @@ def client_empty():
         yield client_empty
         with app.app_context():
             db.drop_all()
+
+@pytest.fixture
+def client_with_user_id():
+    app.config['TESTING'] = True
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+    with app.test_client() as client_with_user:
+        with app.app_context():
+            db.create_all()
+            user = User(name='Alice', email='alice@example.com')
+            db.session.add(user)
+            db.session.commit()
+            yield client_with_user, user.id
+        with app.app_context():
+            db.drop_all()
