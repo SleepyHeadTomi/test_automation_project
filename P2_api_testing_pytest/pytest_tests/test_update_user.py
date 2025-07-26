@@ -1,6 +1,3 @@
-from http.client import responses
-
-
 def test_update_existing_user(client_with_user_id):
     client_with_user, user_id = client_with_user_id
 
