@@ -1,4 +1,4 @@
-def test_get_users(client):
+def test_get_users_populated_db(client):
     response = client.get('/users')
     assert response.status_code == 200
     data = response.get_json()
@@ -8,7 +8,7 @@ def test_get_users(client):
     assert data[0]['name'] == 'Alice'
     assert data[0]['email'] == 'alice@example.com'
 
-def test_get_users_empty(client_empty):
+def test_get_users_empty_db(client_empty):
     response = client_empty.get('/users')
     assert response.status_code == 200
     data = response.get_json()
