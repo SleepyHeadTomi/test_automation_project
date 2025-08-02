@@ -17,6 +17,8 @@ instance/
 
 # Miljö-variabler
 .env
+P3_testing_w_Postman_Newman/*.env.json
+!P3_testing_w_Postman_Newman/*.env.example.json
 
 # Testrapporter och täckningsdata
 *.log

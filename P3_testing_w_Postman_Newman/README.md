@@ -16,3 +16,28 @@ Efter avslutat delprojekt ska jag kunna:
 - Använda kommandoradsverktyget Newman för att köra tester automatiskt
 - Dokumentera och köra tester utanför Postmans GUI
 - Tolka och analysera testresultat från Newman
+
+### Förutsättningar
+
+För att kunna skapa, köra och automatisera testerna krävs:
+
+- Postman (desktop-versionen användes i detta projekt)
+- Node.js installerat
+- Newman (`npm install -g newman`)
+- Newman HTML-reporter (`npm install -g newman-reporter-html`)
+- Flask-applikationen från delprojekt 1 körs lokalt (t.ex. på `http://127.0.0.1:5000`)
+
+### Miljöfiler och versionhantering
+
+Projektet följer god praxis genom att **inte** versionshantera riktiga miljöfiler med känsliga eller lokala inställningar. 
+I stället inkluderas en exempel-fil (`postman_local.env.example.json`) som visar vilka variabler som behövs utan att innehålla faktiska värden. Den faktiska miljöfilen (`postman_local.env.json`) är upptagen i `.gitignore`.
+
+### Körning av tester
+
+För att köra testerna via terminalen med Newman:
+
+```bash
+newman run P3_api_tests.postman_collection.json \
+  --environment postman_local.env.json \
+  --reporters cli,html \
+  --reporter-html-export result.html

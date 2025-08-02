@@ -85,3 +85,13 @@ def update_user(id):
                         'email': user.email
                     }
                 }), 200
+
+@routes.route('/users/all', methods=['DELETE'])
+def delete_all_users():
+    try:
+        num_rows_deleted = db.session.query(User).delete()
+        db.session.commit()
+        return jsonify({'message': f'{num_rows_deleted} users deleted.'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Could not delete users'}), 500

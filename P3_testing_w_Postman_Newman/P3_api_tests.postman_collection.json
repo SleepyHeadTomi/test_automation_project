@@ -1,0 +1,813 @@
+{
+	"info": {
+		"_postman_id": "d35ea81e-bff0-4457-ba94-6f7e20666584",
+		"name": "Users API Test Collection",
+		"description": "StartFragmentTestkollektion för Flask-API som hanterar användare. Innehåller CRUD-operationer.EndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34088407"
+	},
+	"item": [
+		{
+			"name": "Post user successfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"const requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response contains correct properties\", () => {\r",
+							"    pm.expect(response).to.have.property(\"id\");\r",
+							"    pm.expect(response).to.have.property(\"message\");\r",
+							"\r",
+							"    pm.collectionVariables.set(\"user_id\", response.id);\r",
+							"    pm.collectionVariables.set(\"user_name\", requestBody.name);\r",
+							"    pm.collectionVariables.set(\"user_email\", requestBody.email);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hugh Man\",\r\n    \"email\": \"hugh_m@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Properties are correct\", () => {\r",
+							"    pm.expect(response).to.have.property(\"id\");\r",
+							"    pm.expect(response).to.have.property(\"name\");\r",
+							"    pm.expect(response).to.have.property(\"email\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Values are correct\", () => {\r",
+							"    pm.expect(response.id).to.be.eql(pm.collectionVariables.get(\"user_id\"));\r",
+							"    pm.expect(response.name).to.be.eql(pm.collectionVariables.get(\"user_name\"));\r",
+							"    pm.expect(response.email).to.be.eql(pm.collectionVariables.get(\"user_email\"));\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "{{user_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Non-existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response has an 'error' property\", () => {\r",
+							"    pm.expect(response).to.have.property(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is 'User not found!'\", () => {\r",
+							"    pm.expect(response.error).to.equal(\"User not found!\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "9999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user2 successfully",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"const requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response contains correct properties\", () => {\r",
+							"    pm.expect(response).to.have.property(\"id\");\r",
+							"    pm.expect(response).to.have.property(\"message\");\r",
+							"\r",
+							"    pm.collectionVariables.set(\"user_id2\", response.id);\r",
+							"    pm.collectionVariables.set(\"user_name2\", requestBody.name);\r",
+							"    pm.collectionVariables.set(\"user_email2\", requestBody.email);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Anna Hughes\",\r\n    \"email\": \"anna_h@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"There is at least one user\", () => {\r",
+							"    pm.expect(response.length).to.be.above(0);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user empty input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body contains 'error' property\", () => {\r",
+							"    pm.expect(response).to.have.property('error');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains value 'Missing name or email.'\", () => {\r",
+							"    pm.expect(response.error).to.eql('Missing name or email.');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"hugh_m@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post user duplicate email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", () => {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body contains 'error' property\", () => {\r",
+							"    pm.expect(response).to.have.property('error');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains value 'E-mail already exists!'\", () => {\r",
+							"    pm.expect(response.error).to.eql('E-mail already exists!');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hugh Man\",\r\n    \"email\": \"hugh_m@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update non-existing user (PUT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body contains 'error' properties\", () => {\r",
+							"    pm.expect(response).to.have.property(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is 'User not found!'\", () => {\r",
+							"    pm.expect(response.error).to.equal(\"User not found!\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hugh Mann\",\r\n    \"email\": \"hugh_man@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "9999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user empty input (PUT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", () => {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body contains 'error' properties\", () => {\r",
+							"    pm.expect(response).to.have.property(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is 'Missing name or e-mail.'\", () => {\r",
+							"    pm.expect(response.error).to.equal(\"Missing name or e-mail.\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"hugh_man@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "{{user_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user duplicate email (PUT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 409\", () => {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response body contains 'error' properties\", () => {\r",
+							"    pm.expect(response).to.have.property(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is 'E-mail already exists.'\", () => {\r",
+							"    pm.expect(response.error).to.equal(\"E-mail already exists.\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{user_name2}}\",\r\n    \"email\": \"{{user_email}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "{{user_id2}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update user successfully (PUT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"const requestBody = JSON.parse(pm.request.body.raw);\r",
+							"\r",
+							"pm.test(\"Response body contains correct properties\", () => {\r",
+							"        pm.expect(response).to.have.property(\"message\");\r",
+							"        pm.expect(response).to.have.property(\"user\");\r",
+							"\r",
+							"    pm.collectionVariables.set(\"user_name\", requestBody.name);\r",
+							"    pm.collectionVariables.set(\"user_iemail\", requestBody.email);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"User name and email match request body\", () => {\r",
+							"    pm.expect(response.user.name).to.equal(requestBody.name);\r",
+							"    pm.expect(response.user.email).to.equal(requestBody.email);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Hugh Mann\",\r\n    \"email\": \"hugh_man@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "{{user_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response contains 'message'\", () => {\r",
+							"    pm.expect(response).to.have.property(\"message\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response body contains 'User with id user_id deleted.'\", function () {\r",
+							"    expectedMsg = `User with id ${pm.collectionVariables.get(\"user_id\")} deleted.`;\r",
+							"    pm.expect(response.message).to.eql(expectedMsg);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "{{user_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete non-existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response contains an 'error'\", () => {\r",
+							"    pm.expect(response).to.have.property(\"error\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message is 'User not found!'\", () => {\r",
+							"    pm.expect(response.error).to.equal(\"User not found!\");  \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users/:user_id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": "9999"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clean up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cleanup message returned\", () => {\r",
+							"    const response = pm.response.json();\r",
+							"    pm.expect(response).to.have.property(\"message\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_url}}/users/all",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all users (empty db)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"No users found\", () => {\r",
+							"    pm.expect(response.length).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/users",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "user_name",
+			"value": ""
+		},
+		{
+			"key": "user_email",
+			"value": ""
+		},
+		{
+			"key": "user_id2",
+			"value": ""
+		},
+		{
+			"key": "user_name2",
+			"value": ""
+		},
+		{
+			"key": "user_email2",
+			"value": ""
+		},
+		{
+			"key": "user_iemail",
+			"value": ""
+		}
+	]
+}
