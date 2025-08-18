@@ -1,6 +1,6 @@
 import pytest
-from P1_flask_crud_api.app import app
-from P1_flask_crud_api.models import db, User
+from app.app import app
+from app.models import db, User
 
 @pytest.fixture
 def client():

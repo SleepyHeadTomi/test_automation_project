@@ -1,4 +1,4 @@
-from P1_flask_crud_api.models import db, User
+from app.models import db, User
 from unittest.mock import patch
 from sqlalchemy.exc import IntegrityError
 
@@ -54,7 +54,7 @@ def test_post_user_name_in_db(client):
 
 def test_post_user_integrity_error(client_empty):
     fake_exception = IntegrityError(statement="INSERT INTO ...", params={}, orig=Exception("Integrity violation"))
-    with patch('P1_flask_crud_api.routes.db.session.commit', side_effect=fake_exception):
+    with patch('app.routes.db.session.commit', side_effect=fake_exception):
         response = client_empty.post('/users', json={'name': 'Alice', 'email': 'alice@example.com'})
         assert response.status_code == 500
         data = response.get_json()

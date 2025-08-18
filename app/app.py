@@ -1,6 +1,6 @@
 from flask import Flask
-from P1_flask_crud_api.models import db, User
-from P1_flask_crud_api.routes import routes
+from app.models import db
+from app.routes import routes
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'

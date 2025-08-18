@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 from sqlalchemy.exc import IntegrityError
-from P1_flask_crud_api.app import app
-from P1_flask_crud_api.models import db, User
+from app.app import app
+from app.models import db, User
 
 class TestPostUser(unittest.TestCase):
     def setUp(self):
@@ -70,7 +70,7 @@ class TestPostUser(unittest.TestCase):
 
     def test_post_user_throw_integrity_error(self):
         fake_exception = IntegrityError(statement="INSERT INTO ...", params={}, orig=Exception("Integrity violation"))
-        with patch('P1_flask_crud_api.routes.db.session.commit', side_effect=fake_exception):
+        with patch('app.routes.db.session.commit', side_effect=fake_exception):
             # noinspection PyTestUnpassedFixture
             response = self.client.post('/users', json={'name': 'Alice', 'email': 'alice@example.com'})
             self.assertEqual(response.status_code, 500)

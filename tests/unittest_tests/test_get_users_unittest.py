@@ -1,6 +1,6 @@
 import unittest
-from P1_flask_crud_api.app import app
-from P1_flask_crud_api.models import db, User
+from app.app import app
+from app.models import db, User
 
 class TestGetUsers(unittest.TestCase):
     def setUp(self):
