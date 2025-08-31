@@ -1,4 +1,4 @@
-# PyCharm prjekt filer
+# PyCharm projektfiler
 .idea/
 
 # Virtuella miljöer
@@ -17,14 +17,19 @@ instance/
 
 # Miljö-variabler
 .env
+.env.*
 postman_tests/*.env.json
 !postman_tests/*.env.example.json
 
 # Rapportfiler från Newman
-postman_tests/*.hmtl
-postman_tests/*.hmt
+postman_tests/*.html
+postman_tests/*.htm
 
 # Testrapporter och täckningsdata
 *.log
 *.coverage
 htmlcov/
+
+# npm
+node_modules
+*.json
