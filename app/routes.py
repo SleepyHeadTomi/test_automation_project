@@ -69,7 +69,6 @@ def update_user(id):
 
     user.name = name
     user.email = email
-
     db.session.commit()
 
     return jsonify({'message': f'User updated successfully!',

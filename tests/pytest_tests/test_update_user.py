@@ -1,67 +1,77 @@
-def test_update_existing_user(client_with_user_id):
-    client_with_user, user_id = client_with_user_id
+import pytest
+from app.models import db, User
 
-    updated_user = {'name': 'Alice Newman', 'email': 'alice.newman@example.com'}
-    response = client_with_user.put(f'/users/{user_id}', json=updated_user)
+def test_update_existing_user(client):
+    with client.application.app_context():
+        user = User(name='Gus', email='gus@example.com')
+        db.session.add(user)
+        db.session.commit()
+        user_id = user.id
+
+    payload = {'name': 'Gus Gustafsson', 'email': 'gus123@example.com'}
+    expected = {'message': f'User updated successfully!',
+                'user': {
+                    'id': user_id,
+                    'name': payload['name'],
+                    'email': payload['email']
+                    }
+                }
+
+    response = client.put(f'/users/{user_id}', json= payload)
     assert response.status_code == 200
-
     data = response.get_json()
-    assert 'message' in data
-    assert 'user' in data
+    assert data == expected
 
-    assert data['message'] == 'User updated successfully!'
-    assert data['user']['id'] == user_id
-    assert data['user']['name'] == updated_user['name']
-    assert data['user']['email'] == updated_user['email']
+def test_update_non_existing_user_returns_404(client):
+    payload = {'name': 'Ian', 'email': 'ian@gmail.com'}
+    expected = {'error': 'User not found!'}
 
-def test_non_existing_user(client_with_user_id):
-    client_with_user, _ = client_with_user_id
-
-    update_values = {'name': 'Jane Doe', 'email': 'jane.doe@gmail.com'}
-
-    response = client_with_user.put('/users/9999', json=update_values)
+    response = client.put('/users/9999', json=payload)
     assert response.status_code == 404
-
     data = response.get_json()
-    assert 'error' in data
-    assert data['error'] == 'User not found!'
+    assert data == expected
 
-def test_email_restriction(client_with_user_id2):
-    client_with_user, user1_id, user2_id = client_with_user_id2
+def test_update_with_duplicate_email_returns_409(client):
+    with client.application.app_context():
+        user1 = User(name='Jane D', email='jane@example.com')
+        user2 = User(name='Jane Doe', email='jane_d@example.com')
+        db.session.add_all([user1, user2])
+        db.session.commit()
+        user1_id = user1.id
 
-    update_values = {'name': 'Alice', 'email': 'alice.newman@example.com'}
+    payload = {'name': 'Jane D', 'email': 'jane_d@example.com'}
+    expected = {'error': 'E-mail already exists.'}
 
-    response = client_with_user.put(f'/users/{user1_id}', json=update_values)
+    response = client.put(f'/users/{user1_id}', json=payload)
     assert response.status_code == 409
-
     data = response.get_json()
-    assert 'error' in data
-    assert data['error'] == 'E-mail already exists.'
+    assert data == expected
 
-    check_user = client_with_user.get(f'/users/{user1_id}')
-    user_data = check_user.get_json()
-    assert user_data['email'] != update_values['email']
+def test_update_user_same_email_is_ok(client):
+    with client.application.app_context():
+        user = User(name='Jim', email='jim@example.com')
+        db.session.add(user); db.session.commit()
+        user_id = user.id
 
-def test_update_missing_name_value(client_with_user_id):
-    client_with_user, user_id = client_with_user_id
+    payload = {'name': 'Jim New', 'email': 'jim@example.com'}
+    resp = client.put(f'/users/{user_id}', json=payload)
+    assert resp.status_code == 200
+    body = resp.get_json()
+    assert body['user']['id'] == user_id
+    assert body['user']['email'] == 'jim@example.com'
 
-    update_values = {'name': '', 'email': 'alice.newman@gmail.com'}
+@pytest.mark.parametrize('payload, status, expected', [
+    ({'name': '', 'email': 'helen123@example.com'}, 400, {'error': 'Missing name or e-mail.'}),
+    ({'name': 'Helen H', 'email': ''}, 400, {'error': 'Missing name or e-mail.'})
+])
+def test_update_user_payload_errors_400(client, payload, status, expected):
+    with client.application.app_context():
+        user = User(name='Helen', email='helen@example.com')
+        db.session.add(user)
+        db.session.commit()
+        user_id = user.id
 
-    response = client_with_user.put(f'/users/{user_id}', json=update_values)
-    assert response.status_code == 400
-
+    response = client.put(f'/users/{user_id}', json=payload)
+    assert response.status_code == status
     data = response.get_json()
-    assert 'error' in data
-    assert data['error'] == 'Missing name or e-mail.'
-
-def test_update_missing_email_value(client_with_user_id):
-    client_with_user, user_id = client_with_user_id
-
-    update_values = {'name': 'Alice Newman', 'email': ''}
-
-    response = client_with_user.put(f'/users/{user_id}', json=update_values)
-    assert response.status_code == 400
-
-    data = response.get_json()
-    assert 'error' in data
-    assert data['error'] == 'Missing name or e-mail.'
+    assert data == expected
